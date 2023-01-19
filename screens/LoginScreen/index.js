@@ -15,10 +15,9 @@ const LoginSchema = Yup.object().shape({
   password: Yup.string().min(6).max(12).required(),
 });
 
-const LoginScreen = () => {
-  const handleLogin = () => {
-    console.log("handleLogin");
-  };
+const LoginScreen = (props) => {
+  const { navigation } = props;
+  const handleLogin = async () => {};
 
   const { handleChange, handleSubmit, values, errors, touched, setFieldError } =
     useFormik({
@@ -26,6 +25,10 @@ const LoginScreen = () => {
       initialValues: { email: "", password: "" },
       onSubmit: () => handleLogin(),
     });
+
+  const navigateToRegisterScreen = () => {
+    navigation.navigate("Register");
+  };
 
   return (
     <Layout>
@@ -65,7 +68,7 @@ const LoginScreen = () => {
 
       <View style={styles.newUser}>
         <BaseText>New User? </BaseText>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={navigateToRegisterScreen}>
           <BaseText styles={{ color: COLORS.MAIN_YELLOW_TEXT }}>
             Create Account
           </BaseText>
