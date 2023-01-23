@@ -1,27 +1,40 @@
-import React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import LoginScreen from "../screens/LoginScreen";
-import RegisterScreen from "../screens/RegisterScreen";
+import React, { useEffect, useState } from "react";
+import { NavigationContainer } from "@react-navigation/native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-const Stack = createNativeStackNavigator();
+import { storageGetData, STORAGE_KEYS } from "../helpers/asyncStorage";
+import GuestNavigation from "./GuestNavigation";
+import UserNavigation from "./UserNavigation";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import HomeScreen from "../screens/HomeScreen";
+import AboutScreen from "../screens/AboutScreen";
+
+const Drawer = createDrawerNavigator();
 
 const NavigationMain = () => {
+  const [isAuth, setIsAuth] = useState(false);
+
+  const getToken = async () => {
+    const token = await storageGetData(STORAGE_KEYS.TOKEN);
+    if (token) {
+      setIsAuth(true);
+    }
+  };
+
+  useEffect(() => {
+    getToken();
+  }, []);
+
   return (
-    <SafeAreaProvider>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Register"
-          component={RegisterScreen}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </SafeAreaProvider>
+    <NavigationContainer>
+      {/* <Drawer.Navigator>
+        <Drawer.Screen name="Home" component={HomeScreen} />
+        <Drawer.Screen name="About" component={AboutScreen} />
+      </Drawer.Navigator> */}
+      <SafeAreaProvider>
+        {isAuth ? <UserNavigation /> : <GuestNavigation />}
+      </SafeAreaProvider>
+    </NavigationContainer>
   );
 };
 

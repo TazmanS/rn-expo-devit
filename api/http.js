@@ -1,5 +1,6 @@
 import axios from "axios";
 import { SERVER_URL } from "@env";
+import { storageGetData, STORAGE_KEYS } from "../helpers/asyncStorage";
 
 class HttpApi {
   constructor() {
@@ -22,14 +23,17 @@ class HttpApi {
 
     // Set the AUTH token for any request
     ax.interceptors.request.use(
-      (config) => {
-        const token = window.localStorage.getItem(TOKEN_KEY);
+      async (config) => {
+        const token = await storageGetData(STORAGE_KEYS.TOKEN);
         if (token)
           config.headers.Authorization = token ? `Bearer ${token}` : "";
 
         return config;
       },
-      (error) => Promise.reject(error)
+      (error) => {
+        console.log("error", error);
+        Promise.reject(error);
+      }
     );
 
     ax.interceptors.response.use(
@@ -39,6 +43,7 @@ class HttpApi {
         return response;
       },
       (error) => {
+        console.log("error", error);
         // Do something with response error
         if (error && error.response && error.response.status) {
           switch (error.response.status) {
@@ -68,12 +73,12 @@ class HttpApi {
   }
 
   getToken() {
-    return window.localStorage.getItem(TOKEN_KEY);
+    // return window.localStorage.getItem(TOKEN_KEY);
   }
 
   setBearer(newToken) {
-    window.localStorage.setItem(TOKEN_KEY, newToken);
-    this.api = this.getInstance();
+    // window.localStorage.setItem(TOKEN_KEY, newToken);
+    // this.api = this.getInstance();
   }
 }
 

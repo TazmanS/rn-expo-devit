@@ -1,6 +1,6 @@
-import { NavigationContainer } from "@react-navigation/native";
+import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import NavigationMain from "./navigation";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
@@ -26,9 +26,7 @@ export default function App() {
   return (
     <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
       <StatusBar />
-      <NavigationContainer>
-        <NavigationMain />
-      </NavigationContainer>
+      <NavigationMain />
     </View>
   );
 }

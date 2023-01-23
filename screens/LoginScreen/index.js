@@ -10,6 +10,7 @@ import { INPUT_TYPES } from "../../helpers/inputConsts";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { apiLogin } from "../../api/auth";
+import { storageStoreData, STORAGE_KEYS } from "../../helpers/asyncStorage";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email().required(),
@@ -22,7 +23,7 @@ const LoginScreen = (props) => {
     const { email, password } = values;
     try {
       const res = await apiLogin({ email, password });
-      console.log(res);
+      await storageStoreData(STORAGE_KEYS.TOKEN, res.data.access_token);
     } catch (e) {
       console.log(e);
     }
