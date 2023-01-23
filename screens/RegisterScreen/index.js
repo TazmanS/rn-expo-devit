@@ -23,7 +23,8 @@ const RegisterSchema = Yup.object().shape({
   ),
 });
 
-const RegisterScreen = () => {
+const RegisterScreen = (props) => {
+  const { navigation } = props;
   const handleRegister = async () => {
     console.log("handleRegister");
   };
@@ -38,6 +39,10 @@ const RegisterScreen = () => {
     validationSchema: RegisterSchema,
     onSubmit: () => handleRegister(),
   });
+
+  const navigateToLoginScreen = () => {
+    navigation.navigate("Login");
+  };
 
   return (
     <Layout>
@@ -94,7 +99,7 @@ const RegisterScreen = () => {
 
       <View style={styles.login}>
         <BaseText>Have Account? </BaseText>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={navigateToLoginScreen}>
           <BaseText styles={{ color: COLORS.MAIN_YELLOW_TEXT }}>
             Log In
           </BaseText>

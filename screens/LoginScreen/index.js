@@ -9,6 +9,7 @@ import { COLORS } from "../../helpers/colors";
 import { INPUT_TYPES } from "../../helpers/inputConsts";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import { apiLogin } from "../../api/auth";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email().required(),
@@ -17,7 +18,15 @@ const LoginSchema = Yup.object().shape({
 
 const LoginScreen = (props) => {
   const { navigation } = props;
-  const handleLogin = async () => {};
+  const handleLogin = async () => {
+    const { email, password } = values;
+    try {
+      const res = await apiLogin({ email, password });
+      console.log(res);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const { handleChange, handleSubmit, values, errors, touched, setFieldError } =
     useFormik({
